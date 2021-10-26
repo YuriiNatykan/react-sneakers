@@ -1,17 +1,22 @@
-function Card() {
+import styles from './Card.module.scss';
+
+function Card(props) {
+    const onClickButton = () => {
+        alert(props.price)
+    }
     return (
-        <div class="card">
-            <div className="favorite">
+        <div class={styles.card}>
+            <div className={styles.favorite}>
                 <img src="/img/heart-unliked.svg" alt="Unliked" />
             </div>
-            <img width={133} height={112} src="/img/sneakers/1.jpg" alt="Sneakers" />
-            <h5>Мужские Кроссовки Nike Blazer Mid Suede</h5>
+            <img width={133} height={112} src={props.imageUrl} alt="Sneakers" />
+            <h5>{props.title}</h5>
             <div className="d-flex justify-between alight-center">
                 <div className="d-flex flex-column">
                     <span>Цена:</span>
-                    <b>12 999 грн</b>
+                    <b>{props.price}</b>
                 </div>
-                <button className="button">
+                <button className="button" onClick={onClickButton}>
                     <img width={11} height={11} src="/img/Vector.svg" />
                 </button>
             </div>
