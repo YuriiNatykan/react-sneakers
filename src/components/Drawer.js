@@ -1,34 +1,28 @@
-function Drawer() {
-    return(
-        <div style={{ display: 'none' }} class="overlay">
+function Drawer({onClose, items = []}) {
+  return (
+    <div class="overlay">
 
-        <div class="drawer">
+      <div class="drawer">
         <h2 className=" d-flex justify-between mb-30">Корзина
-          <img className="cu-p" src="/img/btn-remove.svg" alt="Remove" />
+          <img onClick={onClose} className="cu-p" src="/img/btn-remove.svg" alt="Remove" />
         </h2>
         <div class="items">
-          <div class="cartItem d-flex align-center mb-20">
+          {items.map((obj) => (
+            <div class="cartItem d-flex align-center mb-20">
+              <div style={{ backgroundImage: `url(${obj.imageUrl})` }}
+                className="cartItemImg"></div>
 
-            <div style={{ backgroundImage: 'url(/img/sneakers/1.jpg' }}
-              className="cartItemImg"></div>
-
-            <div className="mr-20 flex">
-              <p className="mb-5">Мужские Кроссовки Nike Blazer Mid Suede</p>
-              <b>12 999 грн</b>
+              <div className="mr-20 flex">
+                <p className="mb-5">{obj.title}</p>
+                <b>{obj.price}</b>
+              </div>
+              <img className="removeBtn" src="/img/btn-remove.svg" alt="Remove" />
             </div>
-            <img className="removeBtn" src="/img/btn-remove.svg" alt="Remove" />
-          </div>
-          <div class="cartItem d-flex align-center">
 
-            <div style={{ backgroundImage: 'url(/img/sneakers/1.jpg' }}
-              className="cartItemImg"></div>
+          ))
 
-            <div className="mr-20 flex">
-              <p className="mb-5">Мужские Кроссовки Nike Blazer Mid Suede</p>
-              <b>12 999 грн</b>
-            </div>
-            <img className="removeBtn" src="/img/btn-remove.svg" alt="Remove" />
-          </div>
+          }
+
         </div>
 
         <div class="cartTotalBlock">
@@ -48,9 +42,9 @@ function Drawer() {
             Оформить заказ <img src="/img/arrow.svg" alt="Arrow" /></button>
         </div>
       </div>
-      </div>
+    </div>
 
-    )
+  )
 }
 
 export default Drawer;
