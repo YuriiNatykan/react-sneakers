@@ -56,7 +56,7 @@ function App() {
   //добавление товаров в избранное
   const onAddToFavorite = async (obj) => {
     try {
-      if (favorites.find((favObj) => favObj.id === obj.id)) {
+      if (favorites.find((favObj) => Number(favObj.id) === Number(obj.id))) {
         axios.delete(`https://617820779c328300175f5e2d.mockapi.io/favorites/${obj.id}`);
       } else {
         const { data } = await axios.post('https://617820779c328300175f5e2d.mockapi.io/favorites', obj);//дожидаемся ответа сервера и только потом передаем данные
@@ -77,8 +77,12 @@ function App() {
     setSearchValue(event.target.value);
   }
 
+  const isItemAdded = (id) => {
+    return cartItems.some(obj => Number(obj.id) === Number(id))
+  }
+
   return (
-    <AppContext.Provider value={{items, cartItems, favorites}}>
+    <AppContext.Provider value={{items, cartItems, favorites, isItemAdded, onAddToFavorite, setCartOpened, setCartItems}}>
       <div className="wrapper clear">
         {cartOnened && <Drawer items={cartItems} onClose={() => setCartOpened(false)} onRemove={onRemoveItem} />}
         <Header onClickCart={() => setCartOpened(true)} />
@@ -97,8 +101,7 @@ function App() {
         </Route>
 
         <Route path="/favorites" exact>
-          <Favorites
-            onAddToFavorite={onAddToFavorite} />
+          <Favorites />
         </Route>
 
       </div>

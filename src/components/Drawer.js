@@ -1,4 +1,26 @@
+import Info from "./Info";
+import React from "react";
+import AppContext from "../context";
+import axios from "axios";
+
 function Drawer({ onClose, onRemove, items = [] }) {
+  const { cartItems, setCartItems } = React.useContext(AppContext);
+  const [orderId, setOrderId] = React.useState(null);
+
+  const [isOrderComplete, setIsOrderComplete] = React.useState(false);
+
+  const onClickOrder = async () => {
+    try {
+      const {data} = await axios.post('https://617820779c328300175f5e2d.mockapi.io/orders', cartItems);
+      setOrderId(data.id)
+      setIsOrderComplete(true);
+      setCartItems([]);
+    } catch (error) {
+      alert('Не удалось создать запись')
+    }
+
+  }
+
   return (
     <div className="overlay">
 
@@ -10,7 +32,7 @@ function Drawer({ onClose, onRemove, items = [] }) {
         {
           items.length > 0
             ?
-            <div>
+            <div className="d-flex flex-column flex">
               <div className="items">
                 {items.map((obj) => (
                   <div key={obj.id} className="cartItem d-flex align-center mb-20">
@@ -38,21 +60,18 @@ function Drawer({ onClose, onRemove, items = [] }) {
                     <b>1 074 грн</b>
                   </li>
                 </ul>
-                <button className="greenButton">
+                <button onClick={onClickOrder} className="greenButton">
                   Оформить заказ <img src="/img/arrow.svg" alt="Arrow" /></button>
               </div>
             </div>
 
-            :
-            <div className="cartEmpty d-flex align-center justify-center flex-column flex">
-              <img className="mb-20" width="120px" height="120px" src="/img/empty-cart.jpg" alt="Empty cart" />
-              <h2>Корзина пустая</h2>
-              <p className="opacity-6">Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.</p>
-              <button onClick={onClose} className="greenButton">
-                <img src="/img/arrow.svg" alt="Arrow" />Вернутся назад
-              </button>
-            </div>
-        }
+            : (
+              <Info title={isOrderComplete ? "Заказ оформлен!" : "Корзина пустая"}
+                description={isOrderComplete 
+                  ? `Ваш заказ #${orderId} скоро будет передан курьерской доставке` 
+                : "Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ."}
+                image={isOrderComplete ? "/img/complete-order.jpg" : "/img/empty-cart.jpg"} />
+            )}
 
 
       </div>
